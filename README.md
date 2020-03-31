@@ -8,5 +8,6 @@ Algorithms so far:
 
  1. 1D K Means Clustering
  2. Decision Trees
+ 3. Kernel Density Estimate
 
 *In Progress*
