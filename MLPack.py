@@ -60,7 +60,6 @@ def KMeansClusterer1D(values, n, init_mu, n_iter = 10 ):
     return new_mu, radius
 
 ############################################### Complete Decision Trees #######################################################
-
 class DecisionTrees:
 
     
@@ -98,17 +97,24 @@ class DecisionTrees:
                 raise ValueError("Node's Threshold not set before splitting.")
     
     
-    def NodesGiniScore(self,arrNodes):
+    def NodesGiniScore(arrNodes):
         """
         Takes a Numpy Array containing Node's no. of class instances for each class
         & returns each Node's Gini Score
+
         arrNodes : shape = [No. of Nodes, No. of Classes], np.array type containing of Nodes with each 
                     element containing the number of class instances
+
         RETURNS : 
+
         Vector containing the Gini score of each Node that was passed 
+
         Example:
+
         IN>>NodesGiniScore(np.array([[1,1,34],[1,2,3], [50,50,50]]))
         OUT>>array([0.10648148, 0.61111111, 0.66666667])
+
+
         """
 
         Nodesums = np.sum(arrNodes, axis = 1)
@@ -120,16 +126,21 @@ class DecisionTrees:
         return 1 - np.sum(np.power(arrNodes*np.reshape((1/Nodesums),[-1,1]),2), axis = 1)
     
     
-    def Split_GiniIndex(self,splitL, splitR, n_classes):
+    def Split_GiniIndex(splitL, splitR, n_classes):
         """
         Calculates the Gini Index (or the Cost for the split) for the 
         split nodes entered.
+
         splitL, splitR : Arrays of shape = [No. of Rows for this split, No. of features], the array after splitting the dataset
         n_classes : The number of classes.
+
         NOTE: 1. Function expects for the last feature/column to contain the Class Index
                  in the numerical form, i.e. like 0,1,2,...,n-1
+
               2. This function also neglects that split which is empty
+
         RETURNS:
+
         The final Gini Index for this Split.
         """
 
@@ -160,19 +171,22 @@ class DecisionTrees:
         return GiniIndex
     
 
-    def Splitter(self,values ,threshold, feature_index = 0):
+    def Splitter(values ,threshold, feature_index = 0):
         """
         Splits the dataset (values) into two subsets via splitting through threshold
         for feature present at feature_index
+
         values : shape = [No. of rows, No. of features], The dataset to split
         threshold : Float, the value by which to compare and split the dataset
         feature_index : Integer, the index of the feature(column) through which
                         comparison will be drawn for splitting
+
         RETURNS : 
+
         The two splits done by threshold for feature_index.
         """
         if feature_index >= values.shape[1]-1:
-            raise ValueError("feature_index {} is greater than the possible column index values {}. Note that it's assumed that last column is for numerical class ".format(feature_index,values.shape[1]))
+            raise ValueError("feature_index {} is greater the possible column index values {}. Note that it's assumed that last column is for numerical class ".format(feature_index,values.shape[1]))
 
         left = values[values[:,feature_index] <= threshold]
         right = values[values[:,feature_index] > threshold]
@@ -180,14 +194,18 @@ class DecisionTrees:
         return left, right
     
     
-    def SplitEvaluator(self,dataset, n_classes):
+    def SplitEvaluator(dataset, n_classes):
         """
         Splits the dataset by each value in each attribute and then 
         finds the best split via Gini Impurity.
+
         dataset : Numpy array of shape = [No. of Rows, No. of features], the data itself in raw form.
+
         RETURNS : 
+
         Returns the Matrix containing gini Index value for the split using that row's 
         feature and threshold and index of best split in this Matrix (thus, the dataset too.)
+
         giniIndexes : Shape = [dataset.shape[0], dataset.shape[1]-1]
         (row, feat) : Coordinates for the best split in dataset or giniIndexes.
         threshold and the feature index of the threshold.
@@ -219,10 +237,11 @@ class DecisionTrees:
 #{'GiniIndex':best_gini, 'NodeL': {'data': bestsplitL, 'NodeL':None, 'NodeR':None},\
                         #'NodeR': {'data': bestsplitR, 'NodeL':None, 'NodeR':None}  } 
     
-    def NodeGinifromData(self,data, n_classes):
+    def NodeGinifromData(data, n_classes):
         
         """
         Calculates Gini Score for a Node from the data directly
+
         data : Array of shape = [n_rows, n_features]
         """
 
@@ -234,24 +253,30 @@ class DecisionTrees:
         return NodesGiniScore([values])
     
     
-    def LeafClass(self,LeafValues):
+    def LeafClass(LeafValues):
         """
         Returns the final class for the Leaf Node
+
         LeafValues : Array of shape = [no. of classes], No. of instances of each class
                      in the leaf node.
+
         RETURNS:
+
         Class to which this Leaf Node belongs to.
         """
 
         return np.argmax(LeafValues)
     
-    def TreeNodeFromNode(self,Node, n_classes):
+    def TreeNodeFromNode(Node, n_classes):
         """
         Function to take input a data and find the best split and Add two nodes 
         in the Node
+
         Node : An instance of TreeNode class
         n_classes : Integer, no. of classes
+
         RETURNS :
+
         Node after adding two nodes L and R after purest split.
         """
 
@@ -267,7 +292,7 @@ class DecisionTrees:
         return None
     
         
-    def RecursiveTreeMaker(self,ListOfNodes, max_depth, min_samples, curr_depth, n_classes ): 
+    def RecursiveTreeMaker(ListOfNodes, max_depth, min_samples, curr_depth, n_classes ): 
         """
         Makes the tree recursively
         
@@ -299,6 +324,7 @@ class DecisionTrees:
     def TreeMaker(self):
         """
         Creates the Tree and returns it's Root Node
+
         dataset : Array of shape = [n_rows, n_feat]
         max_depth : Maximum depth of the tree
         min_samples : Minimum no. of samples to be present at a Node,
@@ -310,4 +336,4 @@ class DecisionTrees:
 
         RecursiveTreeMaker([Root], self.max_depth, self.min_samples, 1 , self.n_classes)
 
-        return Root
+        return Root  
